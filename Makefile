@@ -26,8 +26,8 @@ PACKAGE=schema-salad
 # `SHELL=bash` doesn't work for some, so don't use BASH-isms like
 # `[[` conditional expressions.
 PYSOURCES=$(wildcard ${MODULE}/**.py tests/*.py) setup.py
-DEVPKGS=diff_cover black pylint coverage pep257 pytest-xdist \
-	flake8 flake8-bugbear
+DEVPKGS=diff_cover black pylint coverage pep257 \
+	flake8 flake8-bugbear -rdev_requirements.txt
 COVBASE=coverage run --branch --append --source=${MODULE} \
 	--omit=schema_salad/tests/*
 

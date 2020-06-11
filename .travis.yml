@@ -7,6 +7,7 @@ cache:
   pip: true
   directories:
     - .mypy_cache
+    - $HOME/.cache/pip
 
 os:
   - linux
@@ -28,6 +29,75 @@ jobs:
     - stage: release-test
       python: "3.8"
       script: RELEASE_SKIP=head PYVER=3.8 ${TRAVIS_BUILD_DIR}/release-test.sh
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
+           PLAT=manylinux1_x86_64
+      install: [ docker pull $DOCKER_IMAGE ]
+      language: generic
+      # if: branch == master
+      script:
+        - docker run --rm -e PLAT=$PLAT -v `pwd`:/io -v ${HOME}:/root $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+        - ls wheelhouse/
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux1_i686
+           PRE_CMD=linux32
+           PLAT=manylinux1_i686
+      install: [ docker pull $DOCKER_IMAGE ]
+      language: generic
+      # if: branch == master
+      script:
+        - docker run --rm -e PLAT=$PLAT -v `pwd`:/io -v ${HOME}:/root $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+        - ls wheelhouse/
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64
+           PLAT=manylinux2010_x86_64
+      install: [ docker pull $DOCKER_IMAGE ]
+      language: generic
+      # if: branch == master
+      script:
+        - docker run --rm -e PLAT=$PLAT -v `pwd`:/io -v ${HOME}:/root $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+        - ls wheelhouse/
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_i686
+           PRE_CMD=linux32
+           PLAT=manylinux2010_i686
+      install: [ docker pull $DOCKER_IMAGE ]
+      language: generic
+      # if: branch == master
+      script:
+        - docker run --rm -e PLAT=$PLAT -v `pwd`:/io -v ${HOME}:/root $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+        - ls wheelhouse/
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_x86_64
+           PLAT=manylinux2014_x86_64
+      install: [ docker pull $DOCKER_IMAGE ]
+      language: generic
+      # if: branch == master
+      script:
+        - docker run --rm -e PLAT=$PLAT -v `pwd`:/io -v ${HOME}:/root $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+        - ls wheelhouse/
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_i686
+           PRE_CMD=linux32
+           PLAT=manylinux2014_i686
+      install: [ docker pull $DOCKER_IMAGE ]
+      language: generic
+      # if: branch == master
+      script:
+        - docker run --rm -e PLAT=$PLAT -v `pwd`:/io -v ${HOME}:/root $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+        - ls wheelhouse/
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_aarch64
+           PLAT=manylinux2014_aarch64
+      arch: arm64
+      install: [ docker pull $DOCKER_IMAGE ]
+      language: generic
+      # if: branch == master
+      script:
+        - docker run --rm -e PLAT=$PLAT -v `pwd`:/io -v ${HOME}:/root $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+        - ls wheelhouse/
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_ppc64le
+           PLAT=manylinux2014_ppc64le
+      arch: ppc64le
+      install: [ docker pull $DOCKER_IMAGE ]
+      language: generic
+      # if: branch == master
+      script:
+        - docker run --rm -e PLAT=$PLAT -v `pwd`:/io -v ${HOME}:/root $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+        - ls wheelhouse/
 script: tox
 branches:
   only:
